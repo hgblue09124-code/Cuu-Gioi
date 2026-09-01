@@ -1197,8 +1197,7 @@ async function bootGame() {
             );
 
 
-            showPopup(
-                "Hệ thống đã kết nối",
+            toast(
                 `Chào mừng trở lại, ${player.name}. Hành trình được khôi phục.`
             );
 
@@ -1228,9 +1227,8 @@ async function bootGame() {
             await saveToDatabase();
 
 
-            showPopup(
-                "Cửu Giới",
-                "Hệ thống tu hành đã được khởi tạo. Một con đường vô tận đang chờ đợi ngươi."
+            toast(
+                "Hệ thống tu hành đã được khởi tạo."
             );
         }
 
