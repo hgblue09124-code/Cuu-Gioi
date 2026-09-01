@@ -206,6 +206,114 @@ button.danger { color: var(--danger); }
 }
 #toast.show { opacity: 1; transform: translate(-50%,0); }
 
+/* =====================================================
+   STORY MODAL - Popup overlay cho Story Events
+===================================================== */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(0,0,0,.73);
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 420px;
+}
+
+.story-card {
+    padding: 22px 18px 18px;
+    background: linear-gradient(145deg, rgba(26,32,43,.99), rgba(8,11,17,.99));
+    border: 1px solid rgba(145,184,255,.34);
+    border-radius: 17px;
+    box-shadow: 0 25px 90px rgba(0,0,0,.78);
+    animation: storySlideIn .22s ease;
+}
+
+@keyframes storySlideIn {
+    from {
+        transform: translateY(12px) scale(.97);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.story-header {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.story-tag {
+    display: block;
+    color: var(--accent);
+    font-size: 10px;
+    letter-spacing: 3px;
+    opacity: .8;
+    margin-bottom: 8px;
+}
+
+.story-title {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 650;
+    color: var(--text);
+    line-height: 1.3;
+}
+
+.story-body {
+    margin: 16px 0;
+    padding: 0;
+}
+
+.story-body p {
+    margin: 0;
+    color: #b6bfcc;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.story-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.btn-story-choice {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 13px;
+    margin-top: 0;
+    color: var(--text);
+    background: linear-gradient(180deg, rgba(43,51,65,.95), rgba(25,30,39,.95));
+    border: 1px solid rgba(145,184,255,.24);
+    border-radius: 11px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform .12s ease, background .12s ease, border-color .12s ease;
+}
+
+.btn-story-choice:active {
+    transform: scale(.975);
+    background: rgba(67,79,98,.95);
+    border-color: rgba(145,184,255,.42);
+}
+
 /* ADMIN PANEL STYLES */
 .admin-panel { border-color: rgba(255, 184, 108, 0.4); }
 .admin-title::before { background: var(--admin); }
