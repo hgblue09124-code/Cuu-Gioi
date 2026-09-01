@@ -148,6 +148,7 @@ button.danger { color: var(--danger); }
 
 .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
 .action-grid button { margin-top: 0; }
+.action-grid .explore-action { border-color: rgba(145,184,255,.32); }
 
 .card { padding: 12px; margin-top: 8px; background: rgba(0,0,0,.20); border: 1px solid rgba(255,255,255,.05); border-radius: 11px; }
 .card-header { display: flex; justify-content: space-between; align-items: center; }
