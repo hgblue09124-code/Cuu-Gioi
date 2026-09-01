@@ -178,6 +178,13 @@ function renderStoryModal(storyNode) {
     }
 
 
+    /* 
+     * FIX: Cleanup content trước khi render lại
+     * Tránh stray DOM elements từ render trước
+     */
+    modalEl.innerHTML = "";
+
+
     /* ---------------------------------------------
        Chuẩn hóa dữ liệu
     --------------------------------------------- */
