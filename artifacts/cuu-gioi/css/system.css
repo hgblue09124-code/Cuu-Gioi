@@ -46,7 +46,8 @@ button, input {
 .system-header { padding: 10px 4px 18px; }
 .system-label { color: var(--accent); font-size: 10px; letter-spacing: 3px; opacity: .8; }
 .game-title { margin-top: 6px; font-size: 30px; font-weight: 700; letter-spacing: 2px; }
-.game-version { margin-top: 3px; color: var(--muted); font-size: 11px; }
+.game-version { margin-top: 3px; color: var(--muted); font-size: 11px; cursor: pointer; user-select: none; }
+.game-version:hover { color: var(--accent); }
 
 .panel {
     position: relative;

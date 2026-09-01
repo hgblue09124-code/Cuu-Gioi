@@ -119,6 +119,87 @@ function closePopup() {
 
 
 /* =====================================================
+   PATCH NOTES
+===================================================== */
+
+const PATCH_METADATA = {
+    version: "Core v0.4.5",
+    updatedAt: "2025-05-15 10:00",
+    changes: [
+        "Sửa lỗi hiển thị UI sự kiện đặc biệt / cốt truyện trên thiết bị di động.",
+        "Tối ưu giao diện popup hệ thống đồng nhất.",
+        "Bổ sung nhật ký cập nhật (Patch Notes).",
+        "Thêm mục Thông tin phiên bản trong Bộ nhớ hệ thống."
+    ]
+};
+
+
+function showVersionInfo() {
+    const content = document.createElement("div");
+    content.className = "version-info-content";
+    content.style.textAlign = "left";
+    content.style.fontSize = "13px";
+    content.style.lineHeight = "1.6";
+    content.style.padding = "5px 0";
+
+    content.innerHTML = `
+        <div style="margin-bottom: 8px;"><strong>Phiên bản hiện tại:</strong> ${PATCH_METADATA.version}</div>
+        <div style="margin-bottom: 8px; color: var(--muted, #888);"><strong>Thời gian cập nhật:</strong> ${PATCH_METADATA.updatedAt}</div>
+        <div style="margin-bottom: 8px;"><strong>Số bản ghi nhật ký:</strong> ${PATCH_METADATA.changes.length} nhật ký</div>
+    `;
+
+    showPopup(
+        "Thông tin phiên bản",
+        "",
+        {
+            label: "HỆ THỐNG",
+            input: content,
+            confirmText: "Đóng"
+        }
+    );
+}
+
+
+function showPatchNotes() {
+    const patchContent = document.createElement("div");
+    patchContent.className = "patch-notes-content";
+    patchContent.style.textAlign = "left";
+    patchContent.style.fontSize = "13px";
+    patchContent.style.lineHeight = "1.5";
+
+    const dateInfo = document.createElement("div");
+    dateInfo.style.marginBottom = "10px";
+    dateInfo.style.color = "var(--muted)";
+    dateInfo.style.fontSize = "12px";
+    dateInfo.textContent = `Cập nhật lần cuối: ${PATCH_METADATA.updatedAt}`;
+    patchContent.appendChild(dateInfo);
+
+    const list = document.createElement("ul");
+    list.style.paddingLeft = "18px";
+    list.style.margin = "0";
+
+    PATCH_METADATA.changes.forEach(change => {
+        const item = document.createElement("li");
+        item.style.marginBottom = "6px";
+        item.textContent = change;
+        list.appendChild(item);
+    });
+
+    patchContent.appendChild(list);
+
+    showPopup(
+        `Nhật ký cập nhật · ${PATCH_METADATA.version}`,
+        "",
+        {
+            label: "CẬP NHẬT HỆ THỐNG",
+            input: patchContent,
+            confirmText: "Đóng"
+        }
+    );
+}
+
+
+/* =====================================================
    SAVE STATUS
 ===================================================== */
 

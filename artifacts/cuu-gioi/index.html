@@ -164,7 +164,10 @@
             Cửu Giới
         </div>
 
-        <div class="game-version">
+        <div
+            class="game-version"
+            onclick="showPatchNotes()"
+            title="Xem nhật ký cập nhật">
             Core v0.4.5 · Local Realm
         </div>
 
@@ -481,6 +484,16 @@
         <div class="section-title">
             Bộ nhớ hệ thống
         </div>
+
+
+        <button onclick="showVersionInfo()">
+            Thông tin phiên bản
+        </button>
+
+
+        <button onclick="showPatchNotes()">
+            Nhật ký cập nhật
+        </button>
 
 
         <button onclick="openRenamePopup()">
