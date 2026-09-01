@@ -54,6 +54,11 @@ function showPopup(title, message, options = {}) {
 
     if (!overlay) return;
 
+    const popupLabel = overlay.querySelector(".popup-label");
+    if (popupLabel) {
+        popupLabel.textContent = options.label || "Hệ thống";
+    }
+
     document.getElementById("popupTitle").textContent = title;
     document.getElementById("popupMessage").textContent = message;
 
@@ -72,6 +77,7 @@ function showPopup(title, message, options = {}) {
         document.getElementById("popupConfirm");
 
     if (confirmBtn) {
+        confirmBtn.style.display = "";
 
         confirmBtn.textContent =
             options.confirmText || "Xác nhận";
@@ -92,6 +98,23 @@ function closePopup() {
     if (!overlay) return;
 
     overlay.classList.remove("show");
+
+    const confirmBtn =
+        document.getElementById("popupConfirm");
+    if (confirmBtn) {
+        confirmBtn.style.display = "";
+    }
+
+    const inputArea =
+        document.getElementById("popupInputArea");
+    if (inputArea) {
+        inputArea.innerHTML = "";
+    }
+
+    const popupLabel = overlay.querySelector(".popup-label");
+    if (popupLabel) {
+        popupLabel.textContent = "Hệ thống";
+    }
 }
 
 
@@ -158,170 +181,82 @@ function renderStoryModal(storyNode) {
         return;
     }
 
-    let modalEl =
-        document.getElementById("story-modal");
+    const overlay = document.getElementById("systemOverlay");
 
+    if (!overlay) return;
 
-    /* ---------------------------------------------
-       Tự tạo modal nếu HTML chưa có
-    --------------------------------------------- */
-
-    if (!modalEl) {
-
-        modalEl =
-            document.createElement("div");
-
-        modalEl.id = "story-modal";
-        modalEl.className = "modal-overlay";
-
-        document.body.appendChild(modalEl);
+    const popupLabel = overlay.querySelector(".popup-label");
+    if (popupLabel) {
+        popupLabel.textContent = "CỬU GIỚI · SỰ KIỆN";
     }
 
+    document.getElementById("popupTitle").textContent =
+        storyNode.title || "Sự kiện";
 
-    /* 
-     * FIX: Cleanup content trước khi render lại
-     * Tránh stray DOM elements từ render trước
-     */
-    modalEl.innerHTML = "";
+    document.getElementById("popupMessage").textContent =
+        storyNode.text || "";
 
+    const confirmBtn =
+        document.getElementById("popupConfirm");
 
-    /* ---------------------------------------------
-       Chuẩn hóa dữ liệu
-    --------------------------------------------- */
+    if (confirmBtn) {
+        confirmBtn.style.display = "none";
+    }
 
-    const title =
-        escapeHTML(
-            storyNode.title || "Sự kiện"
-        );
+    const inputArea =
+        document.getElementById("popupInputArea");
 
-    const text =
-        escapeHTML(
-            storyNode.text || ""
-        ).replace(/\n/g, "<br>");
+    if (inputArea) {
+        inputArea.innerHTML = "";
 
-    const choices =
-        Array.isArray(storyNode.choices)
-            ? storyNode.choices
-            : [];
+        const choices =
+            Array.isArray(storyNode.choices)
+                ? storyNode.choices
+                : [];
 
+        if (choices.length > 0) {
+            const choicesContainer =
+                document.createElement("div");
 
-    /* ---------------------------------------------
-       Tạo lựa chọn
-    --------------------------------------------- */
+            choicesContainer.className = "story-choices";
 
-    const choicesHtml =
-        choices.map((choice, index) => {
+            choices.forEach((choice, index) => {
+                const button =
+                    document.createElement("button");
 
-            const choiceText =
-                escapeHTML(
-                    choice?.text || `Lựa chọn ${index + 1}`
+                button.className = "btn-story-choice";
+                button.textContent =
+                    choice?.text || `Lựa chọn ${index + 1}`;
+
+                button.dataset.choiceIndex = String(index);
+
+                button.addEventListener(
+                    "click",
+                    () => {
+                        if (
+                            typeof StoryEngine !== "undefined" &&
+                            typeof StoryEngine.selectChoice === "function"
+                        ) {
+                            StoryEngine.selectChoice(
+                                storyNode.id,
+                                index
+                            );
+                        } else {
+                            console.warn(
+                                "StoryEngine.selectChoice chưa sẵn sàng."
+                            );
+                        }
+                    }
                 );
 
-            return `
-                <button
-                    class="btn btn-story-choice"
-                    data-choice-index="${index}">
-                    ${choiceText}
-                </button>
-            `;
+                choicesContainer.appendChild(button);
+            });
 
-        }).join("");
+            inputArea.appendChild(choicesContainer);
+        }
+    }
 
-
-    /* ---------------------------------------------
-       Render modal
-    --------------------------------------------- */
-
-    modalEl.innerHTML = `
-        <div class="modal-content story-card">
-
-            <div class="story-header">
-
-                <span class="story-tag">
-                    【 CỬU GIỚI · SỰ KIỆN 】
-                </span>
-
-                <h3 class="story-title">
-                    ${title}
-                </h3>
-
-            </div>
-
-            <div class="story-body">
-
-                <p>
-                    ${text}
-                </p>
-
-            </div>
-
-            <div class="story-choices">
-                ${choicesHtml}
-            </div>
-
-        </div>
-    `;
-
-
-    /* ---------------------------------------------
-       Gắn sự kiện cho lựa chọn
-       
-       Không dùng onclick inline.
-       Tránh phụ thuộc StoryEngine là global
-       trong lúc HTML được parse.
-    --------------------------------------------- */
-
-    const choiceButtons =
-        modalEl.querySelectorAll(
-            ".btn-story-choice"
-        );
-
-    choiceButtons.forEach(button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                const index =
-                    Number(
-                        button.dataset.choiceIndex
-                    );
-
-                if (
-                    typeof StoryEngine !== "undefined" &&
-                    typeof StoryEngine.selectChoice === "function"
-                ) {
-
-                    StoryEngine.selectChoice(
-                        storyNode.id,
-                        index
-                    );
-
-                } else {
-
-                    console.warn(
-                        "StoryEngine.selectChoice chưa sẵn sàng."
-                    );
-
-                }
-
-            }
-        );
-
-    });
-
-
-    /* ---------------------------------------------
-       Hiển thị
-    --------------------------------------------- */
-
-    modalEl.style.display = "flex";
-
-    requestAnimationFrame(() => {
-
-        modalEl.classList.add("show");
-
-    });
+    overlay.classList.add("show");
 }
 
 
@@ -330,23 +265,7 @@ function renderStoryModal(storyNode) {
 ===================================================== */
 
 function closeStoryModal() {
-
-    const modalEl =
-        document.getElementById("story-modal");
-
-    if (!modalEl) return;
-
-    modalEl.classList.remove("show");
-
-    /*
-     * Cho animation kết thúc trước khi xóa nội dung.
-     */
-    setTimeout(() => {
-
-        modalEl.style.display = "none";
-        modalEl.innerHTML = "";
-
-    }, 180);
+    closePopup();
 }
 
 
