@@ -1162,6 +1162,24 @@ async function deleteSave() {
    BOOT
 ===================================================== */
 
+function bindGameActionButtons() {
+
+    const exploreButton =
+        document.getElementById("exploreButton");
+
+    if (!exploreButton || exploreButton.dataset.bound === "true") {
+        return;
+    }
+
+    exploreButton.addEventListener(
+        "click",
+        explore
+    );
+
+    exploreButton.dataset.bound = "true";
+}
+
+
 async function bootGame() {
 
     try {
@@ -1250,4 +1268,5 @@ async function bootGame() {
 }
 
 
+bindGameActionButtons();
 bootGame();
