@@ -142,11 +142,18 @@ function explore() {
         typeof StoryEngine.trigger === "function"
     ) {
 
-        StoryEngine.trigger(
-            player.storyState.active
-        );
+        const continued =
+            StoryEngine.trigger(
+                player.storyState.active
+            );
 
-        return;
+        if (continued) {
+            return;
+        }
+
+        // Save cũ hoặc Runtime patch có thể giữ lại một story ID
+        // không còn tồn tại. Xóa trạng thái kẹt để khám phá tiếp tục được.
+        player.storyState.active = null;
     }
 
 
@@ -193,45 +200,79 @@ function explore() {
        có thể mở rộng qua Admin Runtime Console.
     --------------------------------------------- */
 
+    const availableEvents =
+        Array.isArray(EXPLORE_EVENTS)
+            ? EXPLORE_EVENTS.filter(
+                event =>
+                    event &&
+                    typeof event === "object"
+            )
+            : [];
+
+    if (!availableEvents.length) {
+        log(
+            "Hiện chưa có sự kiện khám phá khả dụng.",
+            "danger"
+        );
+        toast("Chưa có sự kiện khám phá.");
+        return;
+    }
+
     const event =
-        EXPLORE_EVENTS[
+        availableEvents[
             Math.floor(
-                Math.random() * EXPLORE_EVENTS.length
+                Math.random() * availableEvents.length
             )
         ];
 
+    const goldReward =
+        Number.isFinite(Number(event.gold))
+            ? Number(event.gold)
+            : 0;
 
-    player.gold += event.gold || 0;
-    player.cultivation += event.cultivation || 0;
+    const cultivationReward =
+        Number.isFinite(Number(event.cultivation))
+            ? Number(event.cultivation)
+            : 0;
+
+    const eventText =
+        typeof event.text === "string" &&
+        event.text.trim()
+            ? event.text
+            : "Ngươi khám phá khu vực xung quanh nhưng chưa phát hiện điều gì đặc biệt.";
 
 
-    log(event.text);
+    player.gold += goldReward;
+    player.cultivation += cultivationReward;
 
 
-    if (event.gold > 0) {
+    log(eventText);
+
+
+    if (goldReward > 0) {
 
         log(
-            `Nhận ${event.gold} linh thạch.`,
+            `Nhận ${goldReward} linh thạch.`,
             "good"
         );
 
     }
 
 
-    if (event.gold < 0) {
+    if (goldReward < 0) {
 
         log(
-            `Mất ${Math.abs(event.gold)} linh thạch.`,
+            `Mất ${Math.abs(goldReward)} linh thạch.`,
             "danger"
         );
 
     }
 
 
-    if (event.cultivation > 0) {
+    if (cultivationReward > 0) {
 
         log(
-            `Linh lực +${event.cultivation}.`,
+            `Linh lực +${cultivationReward}.`,
             "good"
         );
 
@@ -242,10 +283,17 @@ function explore() {
 
     if (event.item) {
 
+        if (!player.inventory || typeof player.inventory !== "object") {
+            player.inventory = {};
+        }
+
         player.inventory[event.item] =
             (player.inventory[event.item] || 0) + 1;
 
-        if (ITEMS && ITEMS[event.item]) {
+        if (
+            typeof ITEMS !== "undefined" &&
+            ITEMS[event.item]
+        ) {
 
             itemName = ITEMS[event.item].name;
 
@@ -261,11 +309,11 @@ function explore() {
        Popup tóm tắt sự kiện khám phá
     --------------------------------------------- */
 
-    const summaryLines = [event.text, ""];
+    const summaryLines = [eventText, ""];
 
-    if (event.gold > 0) summaryLines.push(`+${event.gold} linh thạch`);
-    if (event.gold < 0) summaryLines.push(`-${Math.abs(event.gold)} linh thạch`);
-    if (event.cultivation > 0) summaryLines.push(`+${event.cultivation} linh lực`);
+    if (goldReward > 0) summaryLines.push(`+${goldReward} linh thạch`);
+    if (goldReward < 0) summaryLines.push(`-${Math.abs(goldReward)} linh thạch`);
+    if (cultivationReward > 0) summaryLines.push(`+${cultivationReward} linh lực`);
     if (itemName) summaryLines.push(`Nhận: ${itemName}`);
 
     showPopup(
