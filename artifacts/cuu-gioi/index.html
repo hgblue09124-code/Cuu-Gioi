@@ -552,23 +552,36 @@
 </div>
 
 <!-- =====================================================
-     MODULE LOAD ORDER
+     MODULE LOAD ORDER (MODULAR STRUCTURE)
 ===================================================== -->
 
-<script src="js/state.js"></script>
+<!-- 1. Configuration & Metadata -->
+<script src="js/config/state.js"></script>
+<script src="js/config/metadata.js"></script>
 
-<script src="js/ui.js"></script>
+<!-- 2. Core Infrastructure -->
+<script src="js/core/db.js"></script>
+<script src="js/core/runtime.js"></script>
 
-<script src="js/inventory.js"></script>
+<!-- 3. UI System & Modals -->
+<script src="js/ui/modal.js"></script>
+<script src="js/ui/views.js"></script>
 
-<script src="js/admin.js"></script>
-
-<!-- Story Engine -->
-<script src="js/story.js"></script>
-
-<!-- Core phải load cuối vì bootGame() chạy tại đây -->
+<!-- 4. Domain Systems -->
+<script src="js/domain/inventory.js"></script>
+<script src="js/domain/cultivation.js"></script>
+<script src="js/domain/combat.js"></script>
+<script src="js/domain/explore.js"></script>
+<script src="js/domain/quest.js"></script>
+<script src="js/domain/story.js"></script>
 <script src="js/fate.js"></script>
-<script src="js/runtime.js"></script>
+
+<!-- 5. Administrator Control -->
+<script src="js/ui/admin.js"></script>
+
+<!-- 6. Engine Lifecycle & Bootstrap -->
+<script src="js/core/engine.js"></script>
+<script src="js/index.js"></script>
 <script src="js/core.js"></script>
 
 
