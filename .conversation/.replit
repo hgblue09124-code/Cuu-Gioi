@@ -1,0 +1,29 @@
+modules = ["nodejs-24"]
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node -e \"const http=require('http'),fs=require('fs'),path=require('path');const root=path.resolve('Cuu gioi v0.4.2');const mime={'.html':'text/html','.css':'text/css','.js':'text/javascript'};http.createServer((req,res)=>{let u=decodeURIComponent(req.url.split('?')[0]);let p=path.resolve(root,'.'+(u==='/'?'/index.html':u));if(!p.startsWith(root)){res.statusCode=403;return res.end('Forbidden')}fs.readFile(p,(e,d)=>{if(e){res.statusCode=e.code==='ENOENT'?404:500;return res.end('Not found')}res.setHeader('Content-Type',mime[path.extname(p)]||'application/octet-stream');res.end(d)})}).listen(5000,'0.0.0.0')\""
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"

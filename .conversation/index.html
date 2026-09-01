@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+
+    <title>Cửu Giới — Core v0.4.5</title>
+
+    <link
+        rel="stylesheet"
+        href="css/system.css">
+</head>
+
+<!-- ADMINISTRATOR RUNTIME CONSOLE -->
+<div id="runtimeConsoleOverlay" class="runtime-console-overlay">
+
+    <div class="runtime-console">
+
+        <div class="runtime-console-header">
+            <div>
+                <div class="runtime-console-label">
+                    ADMINISTRATOR
+                </div>
+
+                <div class="runtime-console-title">
+                    Runtime Console
+                </div>
+            </div>
+
+            <button
+                class="runtime-console-close"
+                onclick="Runtime.closeConsole()">
+                ×
+            </button>
+        </div>
+
+        <div class="runtime-console-status">
+            <span>●</span>
+            Runtime Online
+        </div>
+
+        <textarea
+            id="runtimeCode"
+            class="runtime-code-input"
+            spellcheck="false"
+            autocapitalize="off"
+            autocomplete="off"
+            placeholder="// Nhập JavaScript..."></textarea>
+
+        <div class="runtime-console-actions">
+
+            <button
+                class="runtime-execute"
+                onclick="Runtime.executeFromUI()">
+                ▶ Chạy Code
+            </button>
+
+            <button
+                onclick="Runtime.clearConsole()">
+                Xóa
+            </button>
+
+        </div>
+
+        <div class="runtime-console-actions">
+
+            <button
+                onclick="Runtime.promptSaveCurrent('pre')">
+                💾 Lưu Pre-Runtime
+            </button>
+
+            <button
+                onclick="Runtime.promptSaveCurrent('run')">
+                💾 Lưu Runtime
+            </button>
+
+        </div>
+
+        <div class="runtime-output-label">
+            OUTPUT
+        </div>
+
+        <div id="runtimeOutput" class="runtime-output">
+            Runtime ready.
+        </div>
+
+        <div class="runtime-output-label">
+            PATCH ĐÃ LƯU
+        </div>
+
+        <div id="runtimePatchList" class="runtime-patch-list"></div>
+
+    </div>
+
+</div>
+<body>
+
+<!-- =====================================================
+     SYSTEM POPUP
+===================================================== -->
+
+<div id="systemOverlay">
+
+    <div class="system-popup">
+
+        <div class="popup-label">
+            Hệ thống
+        </div>
+
+        <div
+            id="popupTitle"
+            class="popup-title">
+            Cửu Giới
+        </div>
+
+        <div class="popup-line"></div>
+
+        <div
+            id="popupMessage"
+            class="popup-message">
+        </div>
+
+        <div id="popupInputArea"></div>
+
+        <button
+            id="popupConfirm"
+            class="popup-button primary"
+            onclick="closePopup()">
+            Xác nhận
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div id="toast"></div>
+
+
+<!-- =====================================================
+     APPLICATION
+===================================================== -->
+
+<div id="app">
+
+
+    <!-- HEADER -->
+
+    <header class="system-header">
+
+        <div class="system-label">
+            System online
+        </div>
+
+        <div class="game-title">
+            Cửu Giới
+        </div>
+
+        <div class="game-version">
+            Core v0.4.5 · Local Realm
+        </div>
+
+    </header>
+
+
+    <!-- =================================================
+         LOCATION
+    ================================================= -->
+
+    <section class="panel">
+
+        <div class="location-kicker">
+            Vị trí hiện tại
+        </div>
+
+        <div
+            id="location"
+            class="location">
+        </div>
+
+        <div
+            id="description"
+            class="description">
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         PLAYER
+    ================================================= -->
+
+    <section class="panel">
+
+        <div class="player-head">
+
+            <div>
+
+                <div
+                    id="playerName"
+                    class="player-name">
+                </div>
+
+                <div
+                    id="realm"
+                    class="realm">
+                </div>
+
+            </div>
+
+            <div class="status-pill">
+                <span class="pulse-dot"></span>Trực tuyến
+            </div>
+
+        </div>
+
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    Sinh lực
+                </div>
+
+                <div
+                    id="hp"
+                    class="stat-value">
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    Năng lượng
+                </div>
+
+                <div
+                    id="mp"
+                    class="stat-value">
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    Linh lực
+                </div>
+
+                <div
+                    id="cultivation"
+                    class="stat-value">
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    Linh thạch
+                </div>
+
+                <div
+                    id="gold"
+                    class="stat-value gold">
+                </div>
+
+            </div>
+
+        </div>
+
+        <div
+            class="cultivation-progress"
+            aria-live="polite">
+
+            <div class="cultivation-progress-head">
+                <span id="cultivationProgressLabel">
+                    Tiến độ tu vi
+                </span>
+
+                <span id="cultivationProgressPercent">
+                    0%
+                </span>
+            </div>
+
+            <div
+                class="progress-track"
+                role="progressbar"
+                aria-label="Tiến độ tu vi"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="0">
+                <div
+                    id="cultivationProgressBar"
+                    class="progress-fill">
+                </div>
+            </div>
+
+            <div
+                id="cultivationProgressHint"
+                class="cultivation-progress-hint">
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         ACTION
+    ================================================= -->
+
+    <section class="panel">
+
+        <div class="section-title">
+            Mệnh lệnh
+        </div>
+
+                <div class="action-grid">
+
+            <button
+                id="cultivateButton"
+                onclick="cultivate()">
+                Tu luyện
+            </button>
+
+            <button onclick="explore()">
+                Khám phá
+            </button>
+
+            <button onclick="rest()">
+                Nghỉ ngơi
+            </button>
+
+            <button onclick="consultFate()">
+                Thiên Cơ
+            </button>
+
+            <button onclick="saveGame()">
+                Lưu game
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         TRAVEL
+    ================================================= -->
+
+    <section class="panel">
+
+        <div class="section-title">
+            Khu vực
+        </div>
+
+        <div id="travelButtons"></div>
+
+    </section>
+
+
+    <!-- =================================================
+         COMBAT
+    ================================================= -->
+
+    <section class="panel">
+
+        <div class="section-title">
+            Giao chiến
+        </div>
+
+        <div id="combatArea"></div>
+
+    </section>
+
+
+    <!-- =================================================
+         QUEST
+    ================================================= -->
+
+    <section class="panel">
+
+        <div class="section-title">
+            Nhiệm vụ
+        </div>
+
+        <div id="questArea"></div>
+
+    </section>
+
+
+    <!-- =================================================
+         INVENTORY
+    ================================================= -->
+
+    <section class="panel">
+
+        <div class="section-title">
+            Kho vật phẩm
+        </div>
+
+        <div id="inventory"></div>
+
+    </section>
+
+
+    <!-- =================================================
+         NPC
+    ================================================= -->
+
+    <section class="panel">
+
+        <div class="section-title">
+            Nhân vật
+        </div>
+
+        <div class="npc-box">
+
+            <div class="npc-name">
+                Ánh Tuyết
+            </div>
+
+            <div
+                id="npcText"
+                class="npc-text">
+                Nữ tử áo trắng đứng bên hồ,
+                ánh mắt bình tĩnh nhìn về phía ngươi.
+            </div>
+
+            <button onclick="talkToAnhTuyet()">
+                Nói chuyện
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         ADMIN PANEL
+    ================================================= -->
+
+    <section
+        id="adminPanel"
+        class="panel admin-panel"
+        style="display: none;">
+
+        <div class="section-title admin-title">
+            Administrator Debug Console
+        </div>
+
+        <div id="adminContent"></div>
+
+    </section>
+
+
+    <!-- =================================================
+         MEMORY
+    ================================================= -->
+
+    <section class="panel">
+
+        <div class="section-title">
+            Bộ nhớ hệ thống
+        </div>
+
+
+        <button onclick="openRenamePopup()">
+            Đổi tên
+        </button>
+
+
+        <button onclick="toggleAdminPanel()">Bảng Admin</button>
+
+
+        <button onclick="Runtime.openConsole()">Runtime Console</button>
+
+
+        <button onclick="loadGame()">
+            Tải dữ liệu lưu
+        </button>
+
+
+        <button onclick="exportSave()">
+            Xuất dữ liệu lưu
+        </button>
+
+
+        <button
+            onclick="document.getElementById('importFile').click()">
+            Nhập dữ liệu lưu
+        </button>
+
+
+        <input
+            id="importFile"
+            type="file"
+            accept=".json,application/json"
+            style="display:none"
+            onchange="importSave(event)">
+
+
+        <button
+            class="danger"
+            onclick="deleteSave()">
+            Xóa dữ liệu lưu
+        </button>
+
+
+        <div
+            id="saveStatus"
+            class="save-status">
+            Đang khởi động...
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         HISTORY
+    ================================================= -->
+
+    <section class="panel">
+
+        <div class="section-title">
+            Lịch sử
+        </div>
+
+        <div id="log"></div>
+
+    </section>
+
+
+</div>
+
+<!-- =====================================================
+     MODULE LOAD ORDER
+===================================================== -->
+
+<script src="js/state.js"></script>
+
+<script src="js/ui.js"></script>
+
+<script src="js/inventory.js"></script>
+
+<script src="js/admin.js"></script>
+
+<!-- Story Engine -->
+<script src="js/story.js"></script>
+
+<!-- Core phải load cuối vì bootGame() chạy tại đây -->
+<script src="js/fate.js"></script>
+<script src="js/runtime.js"></script>
+<script src="js/core.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,197 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "xAw-o9tFqpHfx8KUlrwIy"
+uri = "file://.local/conversation-workspace/files/Cuu_gioi_v0.4.5_export.zip"
+type = "unspecified"
+title = "Cửu Giới v0.4.5 — Project ZIP"
+description = "Bản ZIP project đã import, giữ nguyên thư mục mã nguồn và kèm cấu hình .replit."
+logical_id = "6ad341bd-7680-4eb3-b616-3bde96300cb5"
+content_hash = "sha256:03492e49cc071055c4071dd4a418447dc3eeca47996224566f05dcc93e77d079"
+size = 28518
+mtime_ms = 1788251299176
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/conversation:99172d11-a975-446e-aa96-b006e9458ec4/6ad341bd-7680-4eb3-b616-3bde96300cb5/76428025-cfa8-4b91-88dd-2776de2c29c7"
+storage_version_token = "1788251305955390"
+content_type = "application/octet-stream"
+source_uri = "file://Cuu_gioi_v0.4.5_export.zip"
+
+[[outputs]]
+id = "CselhqlY7dD-ePGiwOp62"
+uri = "file://.local/conversation-workspace/files/.replit"
+type = "unspecified"
+title = "Cửu Giới — .replit"
+description = "Bản project Cửu Giới hiện tại, file chưa nén."
+logical_id = "852aa24c-ff41-4865-8633-9d2ba1d60e37"
+content_hash = "sha256:6b5d7fd557e30a7dd68f7277c2c97de3bbdcebd626546fafeafe3e9770bad9bf"
+size = 1074
+mtime_ms = 1788251982280
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/conversation:99172d11-a975-446e-aa96-b006e9458ec4/852aa24c-ff41-4865-8633-9d2ba1d60e37/c837851d-11b8-4d21-ae17-17433e23dd9f"
+storage_version_token = "1788252245412218"
+content_type = "application/octet-stream"
+source_uri = "file://.replit"
+
+[[outputs]]
+id = "fIo1hl2-B148PCLyV8XlT"
+uri = "file://.local/conversation-workspace/files/Cuu%20gioi%20v0.4.2/index.html"
+type = "text"
+title = "Cửu Giới — index.html"
+description = "File HTML hiện tại, chưa chỉnh sửa và không nén."
+logical_id = "281389b9-425c-47a1-8ccf-fd7dc74251dd"
+content_hash = "sha256:08167b099c16d7733718ad28e25f3fdfd1d1f970abe2609b548ab6fa2920984b"
+size = 11076
+mtime_ms = 1788201133000
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/conversation:99172d11-a975-446e-aa96-b006e9458ec4/281389b9-425c-47a1-8ccf-fd7dc74251dd/774517a9-8379-483a-ab44-335cae982160"
+storage_version_token = "1788252739903633"
+content_type = "text/html"
+source_uri = "file://Cuu%20gioi%20v0.4.2/index.html"
+
+[[outputs]]
+id = "CUPiYCzmiIChoZyvOqAKx"
+uri = "file://.local/conversation-workspace/files/Cuu%20gioi%20v0.4.2/css/system.css"
+type = "unspecified"
+title = "Cửu Giới — css/system.css"
+description = "Bản project Cửu Giới hiện tại, file chưa nén."
+logical_id = "27a6e01a-337f-4f05-af9d-9ce4a2fc2408"
+content_hash = "sha256:fec0abc4e61c0fcafc1d682d7b186e659b2765d636be546cd1e68b0d52f99715"
+size = 11394
+mtime_ms = 1788201117000
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/conversation:99172d11-a975-446e-aa96-b006e9458ec4/27a6e01a-337f-4f05-af9d-9ce4a2fc2408/799ecfe4-8001-4f73-b0dc-9e05defbf721"
+storage_version_token = "1788252248110761"
+content_type = "application/octet-stream"
+source_uri = "file://Cuu%20gioi%20v0.4.2/css/system.css"
+
+[[outputs]]
+id = "qnLVcNmV5nn5Baso7DAa_"
+uri = "file://.local/conversation-workspace/files/Cuu%20gioi%20v0.4.2/js/admin.js"
+type = "unspecified"
+title = "Cửu Giới — js/admin.js"
+description = "Bản project Cửu Giới hiện tại, file chưa nén."
+logical_id = "5014743a-f893-4afd-b35c-4294bf71c6c8"
+content_hash = "sha256:c26ef42232f9d48dac9fc4e98342f2f6bf1081ec542f43c59ebd6be300fa1d4a"
+size = 8639
+mtime_ms = 1788201130000
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/conversation:99172d11-a975-446e-aa96-b006e9458ec4/5014743a-f893-4afd-b35c-4294bf71c6c8/2f29b998-399b-4da3-a09b-8a6762b534a3"
+storage_version_token = "1788252249474039"
+content_type = "application/octet-stream"
+source_uri = "file://Cuu%20gioi%20v0.4.2/js/admin.js"
+
+[[outputs]]
+id = "kwu6SE2HcbsExwLwbfJQm"
+uri = "file://.local/conversation-workspace/files/Cuu%20gioi%20v0.4.2/js/core.js"
+type = "unspecified"
+title = "Cửu Giới — js/core.js"
+description = "Bản project Cửu Giới hiện tại, file chưa nén."
+logical_id = "dadc51a6-96f5-432a-a2d9-6dea31ffdb52"
+content_hash = "sha256:c5f27b85ea5dd0d43b1106edd4a0013608290d9c07be00ad36f6ee52aee91d2b"
+size = 22683
+mtime_ms = 1788201112000
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/conversation:99172d11-a975-446e-aa96-b006e9458ec4/dadc51a6-96f5-432a-a2d9-6dea31ffdb52/c0b6c9b9-5ddd-44dd-911b-6bea47aef30e"
+storage_version_token = "1788252250773056"
+content_type = "application/octet-stream"
+source_uri = "file://Cuu%20gioi%20v0.4.2/js/core.js"
+
+[[outputs]]
+id = "Bum7tsQkAasgMezG4hyuk"
+uri = "file://.local/conversation-workspace/files/Cuu%20gioi%20v0.4.2/js/fate.js"
+type = "unspecified"
+title = "Cửu Giới — js/fate.js"
+description = "Bản project Cửu Giới hiện tại, file chưa nén."
+logical_id = "98defd85-4341-4736-a6a0-256f6f398068"
+content_hash = "sha256:d624a99096eef6faa6ad7f10762e8fa07fea470c6f579edfcf01b1a1223c0754"
+size = 747
+mtime_ms = 1788173094000
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/conversation:99172d11-a975-446e-aa96-b006e9458ec4/98defd85-4341-4736-a6a0-256f6f398068/5a361009-a438-466f-8f5e-26e9259b2789"
+storage_version_token = "1788252252065858"
+content_type = "application/octet-stream"
+source_uri = "file://Cuu%20gioi%20v0.4.2/js/fate.js"
+
+[[outputs]]
+id = "t39uXgV8bYQk8zrNNBLBB"
+uri = "file://.local/conversation-workspace/files/Cuu%20gioi%20v0.4.2/js/inventory.js"
+type = "unspecified"
+title = "Cửu Giới — js/inventory.js"
+description = "Bản project Cửu Giới hiện tại, file chưa nén."
+logical_id = "b2aab055-8571-455c-b62a-d45dc6be919f"
+content_hash = "sha256:9acdf42774659727192d9f5eab35b9cca64495db967f5f3fee4889d4dcf3ca20"
+size = 3596
+mtime_ms = 1788200653000
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/conversation:99172d11-a975-446e-aa96-b006e9458ec4/b2aab055-8571-455c-b62a-d45dc6be919f/6daff99a-4cda-49e1-9317-514abdac6fc1"
+storage_version_token = "1788252253472288"
+content_type = "application/octet-stream"
+source_uri = "file://Cuu%20gioi%20v0.4.2/js/inventory.js"
+
+[[outputs]]
+id = "PoMk1w_shPEr2YcK5acts"
+uri = "file://.local/conversation-workspace/files/Cuu%20gioi%20v0.4.2/js/runtime.js"
+type = "unspecified"
+title = "Cửu Giới — js/runtime.js"
+description = "Bản project Cửu Giới hiện tại, file chưa nén."
+logical_id = "f910cf5d-449e-43d9-9dd6-e43ce1ce6330"
+content_hash = "sha256:ba5aa9ed5ef3f91d7920e0153e2b093e4fba289a021916644a23880b02a7e685"
+size = 15097
+mtime_ms = 1788200700000
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/conversation:99172d11-a975-446e-aa96-b006e9458ec4/f910cf5d-449e-43d9-9dd6-e43ce1ce6330/6a901a93-433e-4ad2-a6a2-f2bd391c43a3"
+storage_version_token = "1788252254759341"
+content_type = "application/octet-stream"
+source_uri = "file://Cuu%20gioi%20v0.4.2/js/runtime.js"
+
+[[outputs]]
+id = "OXw3FHJgDZZKoM3fvY6Cr"
+uri = "file://.local/conversation-workspace/files/Cuu%20gioi%20v0.4.2/js/state.js"
+type = "unspecified"
+title = "Cửu Giới — js/state.js"
+description = "Bản project Cửu Giới hiện tại, file chưa nén."
+logical_id = "3cb080e2-6296-4640-9158-81acc5c846c4"
+content_hash = "sha256:2b71a10dfe8616ebe4d3d92501366e19279f6f1f5ce764ab99e1e90a7d4f8557"
+size = 10709
+mtime_ms = 1788201133000
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/conversation:99172d11-a975-446e-aa96-b006e9458ec4/3cb080e2-6296-4640-9158-81acc5c846c4/712c6138-1f74-413a-a8c1-fd4f6f6bdd94"
+storage_version_token = "1788252256013809"
+content_type = "application/octet-stream"
+source_uri = "file://Cuu%20gioi%20v0.4.2/js/state.js"
+
+[[outputs]]
+id = "aTXcncGLAb0vmnH1SDUQc"
+uri = "file://.local/conversation-workspace/files/Cuu%20gioi%20v0.4.2/js/story.js"
+type = "unspecified"
+title = "Cửu Giới — js/story.js"
+description = "Bản project Cửu Giới hiện tại, file chưa nén."
+logical_id = "9c5e08b0-1089-49ce-9334-30f6c74cbfe5"
+content_hash = "sha256:c7650cd37ac281e6e0ea7c8644bf1cdce1e29fd4efeadf9d4440fbac92a1d78b"
+size = 5256
+mtime_ms = 1788200644000
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/conversation:99172d11-a975-446e-aa96-b006e9458ec4/9c5e08b0-1089-49ce-9334-30f6c74cbfe5/696378d1-e70f-4a16-935b-29fd90f781a4"
+storage_version_token = "1788252257349288"
+content_type = "application/octet-stream"
+source_uri = "file://Cuu%20gioi%20v0.4.2/js/story.js"
+
+[[outputs]]
+id = "ld0YkfwIs87rOX-XM4fv5"
+uri = "file://.local/conversation-workspace/files/Cuu%20gioi%20v0.4.2/js/ui.js"
+type = "unspecified"
+title = "Cửu Giới — js/ui.js"
+description = "Bản project Cửu Giới hiện tại, file chưa nén."
+logical_id = "2565a50d-78aa-43ca-90e1-c294b9a10e80"
+content_hash = "sha256:e823e4edb35f21c45b1295c81c101745d08e0237e0dfc56908cfd01774ee45a2"
+size = 10804
+mtime_ms = 1788172394000
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/conversation:99172d11-a975-446e-aa96-b006e9458ec4/2565a50d-78aa-43ca-90e1-c294b9a10e80/7adfa412-556d-493c-9338-b3336b7142fd"
+storage_version_token = "1788252258651277"
+content_type = "application/octet-stream"
+source_uri = "file://Cuu%20gioi%20v0.4.2/js/ui.js"
+
+[[outputs]]
+id = "7RILPceMZOUv7YaK20Gnu"
+uri = "file://.local/conversation-workspace/files/Cuu_gioi_v0.4.5_preview-fixed.zip"
+type = "unspecified"
+title = "Cửu Giới — Preview fixed ZIP"
+description = "Bản ZIP mới nhất gồm mã nguồn và cấu hình .replit đã sửa port Preview 5000 → 80."
+logical_id = "2e83855a-d98d-4b41-93c6-13bf75e37c48"
+content_hash = "sha256:de0f1334061324302b8db860075f0079680782f093f7e77cd037b1fef255de9d"
+size = 28538
+mtime_ms = 1788252067268
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/conversation:99172d11-a975-446e-aa96-b006e9458ec4/2e83855a-d98d-4b41-93c6-13bf75e37c48/26fbd0e8-46f3-4d89-8b3a-c6c01f78a583"
+storage_version_token = "1788252074429047"
+content_type = "application/octet-stream"
+source_uri = "file://Cuu_gioi_v0.4.5_preview-fixed.zip"

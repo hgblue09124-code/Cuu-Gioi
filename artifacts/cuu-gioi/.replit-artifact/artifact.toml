@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Cửu Giới"
+description = "Game tu luyện Cửu Giới chạy trực tiếp trên trình duyệt, với lưu game cục bộ và giao diện tiếng Việt."
+version = "1.0.0"
+id = "artifacts/cuu-gioi"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19484
+
+[services.development]
+run = "pnpm --filter @workspace/cuu-gioi run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/cuu-gioi", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/cuu-gioi/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19484"
+BASE_PATH = "/"
