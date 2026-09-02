@@ -55,11 +55,32 @@ export class ContextCompiler {
   }
 
   private inferTask(items: unknown[], rawText: string): InferredTask {
+    const textUpper = rawText.toUpperCase();
     const textLower = rawText.toLowerCase();
 
-    if (textLower.includes('sửa') || textLower.includes('patch') || textLower.includes('fix') || textLower.includes('cuộn')) {
-      return { taskType: 'PATCH', params: { TARGET: 'RUNTIME_SCROLL' }, confidence: 0.95 };
+    // Check explicit TARGET match
+    let target = '';
+    const targetMatch = rawText.match(/TARGET:\s*([A-Za-z0-9_]+)/i);
+    if (targetMatch && targetMatch[1]) {
+      target = targetMatch[1].toUpperCase();
+    } else if (textUpper.includes('LOGIN_BUTTON')) {
+      target = 'LOGIN_BUTTON';
+    } else if (textUpper.includes('DATABASE_CACHE')) {
+      target = 'DATABASE_CACHE';
+    } else if (textLower.includes('cuộn') || textUpper.includes('RUNTIME_SCROLL')) {
+      target = 'RUNTIME_SCROLL';
     }
+
+    if (textLower.includes('sửa') || textLower.includes('patch') || textLower.includes('fix') || target) {
+      const params: Record<string, string | number | boolean> = {};
+      if (target) {
+        params.TARGET = target;
+      } else {
+        params.TARGET = 'RUNTIME_SCROLL';
+      }
+      return { taskType: 'PATCH', params, confidence: 0.95 };
+    }
+
     if (textLower.includes('train') || textLower.includes('huấn luyện')) {
       return { taskType: 'TRAIN', params: { R: 'LQ', L: 7 }, confidence: 0.9 };
     }
@@ -85,12 +106,33 @@ export class ContextCompiler {
       }
     }
 
-    if (inferredTask.taskType === 'PATCH') {
+    // Extract explicit REQUIREMENT
+    const reqMatch = rawText.match(/REQUIREMENT:\s*([A-Za-z0-9_]+)/i);
+    if (reqMatch && reqMatch[1]) {
+      constraints.push({ key: 'REQ', value: reqMatch[1].toUpperCase() });
+    } else if (rawText.toUpperCase().includes('DISABLE_BUTTON_WHILE_REQUEST_PENDING')) {
+      constraints.push({ key: 'REQ', value: 'DISABLE_BUTTON_WHILE_REQUEST_PENDING' });
+    } else if (rawText.toUpperCase().includes('INVALIDATE_CACHE_AFTER_WRITE')) {
+      constraints.push({ key: 'REQ', value: 'INVALIDATE_CACHE_AFTER_WRITE' });
+    }
+
+    // Extract explicit CONSTRAINT / RULE
+    const ruleMatch = rawText.match(/CONSTRAINT:\s*([A-Za-z0-9_]+)/i);
+    if (ruleMatch && ruleMatch[1]) {
+      rules.push({ code: ruleMatch[1].toUpperCase() });
+    } else if (inferredTask.taskType === 'PATCH') {
       rules.push({ code: 'PRESERVE_EXISTING' });
-      flowSteps = ['INSPECT', 'PATCH', 'TEST'];
     } else {
       rules.push({ code: 'PRESERVE_SEMANTICS' });
       rules.push({ code: 'STRICT_CONSTRAINTS' });
+    }
+
+    // Extract explicit FLOW
+    const flowMatch = rawText.match(/FLOW:\s*([^\n|\r]+)/i);
+    if (flowMatch && flowMatch[1]) {
+      flowSteps = flowMatch[1].split('>').map((s) => s.trim().toUpperCase());
+    } else if (inferredTask.taskType === 'PATCH') {
+      flowSteps = ['INSPECT', 'PATCH', 'TEST'];
     }
 
     return {

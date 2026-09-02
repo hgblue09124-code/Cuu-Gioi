@@ -6,6 +6,7 @@
   "scripts": {
     "exp001": "node --import tsx experiments/cases/exp_001.ts",
     "exp002": "node --import tsx experiments/cases/exp_002.ts",
+    "exp_semantic": "node --import tsx experiments/cases/exp_semantic_test.ts",
     "test": "node --import tsx --test tests/ape-lab.test.ts tests/gateway.test.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
