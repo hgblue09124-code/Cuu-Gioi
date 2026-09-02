@@ -56,6 +56,13 @@ export default defineConfig({
         '..',
         'attached_assets',
       ),
+      '@workspace/ape-lab': path.resolve(
+        import.meta.dirname,
+        '..',
+        '..',
+        'ape-lab',
+        'index.ts',
+      ),
     },
     dedupe: ['react', 'react-dom'],
   },
@@ -71,6 +78,7 @@ export default defineConfig({
     allowedHosts: true,
     fs: {
       strict: true,
+      allow: [path.resolve(import.meta.dirname, '../..')],
     },
   },
   preview: {

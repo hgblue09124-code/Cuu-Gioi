@@ -90,7 +90,10 @@ export const APEGatewayUI = {
   },
 };
 
-// Expose globally for HTML onclick events
+// Explicitly expose on global scope for inline HTML onclick handlers
+if (typeof globalThis !== 'undefined') {
+  globalThis.APEGatewayUI = APEGatewayUI;
+}
 if (typeof window !== 'undefined') {
   window.APEGatewayUI = APEGatewayUI;
 }
