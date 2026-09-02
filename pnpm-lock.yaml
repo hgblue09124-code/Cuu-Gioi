@@ -168,6 +168,18 @@ importers:
         specifier: ~5.9.3
         version: 5.9.3
 
+  ape-lab:
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 25.9.5
+      tsx:
+        specifier: 'catalog:'
+        version: 4.23.1
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
   artifacts/api-server:
     dependencies:
       '@workspace/api-zod':
