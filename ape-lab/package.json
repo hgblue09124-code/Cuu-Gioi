@@ -1,0 +1,21 @@
+{
+  "name": "@workspace/ape-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "exp001": "node --import tsx experiments/cases/exp_001.ts",
+    "exp002": "node --import tsx experiments/cases/exp_002.ts",
+    "exp_semantic": "node --import tsx experiments/cases/exp_semantic_test.ts",
+    "test": "node --import tsx --test tests/ape-lab.test.ts tests/gateway.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "~5.9.3"
+  },
+  "dependencies": {
+    "js-tiktoken": "^1.0.21"
+  }
+}

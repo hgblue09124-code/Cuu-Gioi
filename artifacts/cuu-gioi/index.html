@@ -473,6 +473,85 @@
 
 
     <!-- =================================================
+         APE LAB GATEWAY
+    ================================================= -->
+
+    <section class="panel">
+
+        <div class="section-title">
+            APE Lab — Protocol Gateway
+        </div>
+
+        <div class="ape-gateway-container">
+
+            <div class="stat-label" style="margin-bottom: 6px;">Context Đầu vào:</div>
+
+            <textarea
+                id="apeContextInput"
+                class="runtime-code-input"
+                rows="3"
+                style="width: 100%; margin-bottom: 8px; box-sizing: border-box;"
+                placeholder="Nhập Context cho APE Lab..."></textarea>
+
+            <button
+                id="apeCompileBtn"
+                onclick="APEGatewayUI.compileContext()">
+                ⚙ Biên dịch Context (Compile)
+            </button>
+
+            <div id="apeResultArea" style="margin-top: 12px; display: none;">
+
+                <div class="stat-label" style="margin-bottom: 4px; color: #a3e635;">KẾT QUẢ BIÊN DỊCH APE</div>
+
+                <div id="apeTaskDisplay" style="font-weight: bold; margin-bottom: 4px; color: #facc15;"></div>
+
+                <div id="apeProtocolDisplay" style="font-family: monospace; background: #18181b; padding: 8px; border-radius: 4px; word-break: break-all; margin-bottom: 8px; font-size: 0.9em; color: #38bdf8; border: 1px solid #27272a;"></div>
+
+                <div class="stats" style="margin-bottom: 8px;">
+
+                    <div class="stat">
+                        <div class="stat-label">Token gốc</div>
+                        <div id="apeOriginalTokens" class="stat-value"></div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-label">Token protocol</div>
+                        <div id="apeProtocolTokens" class="stat-value"></div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-label">Tiết kiệm</div>
+                        <div id="apeSavedTokens" class="stat-value gold"></div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-label">Tỷ lệ giảm</div>
+                        <div id="apeReduction" class="stat-value"></div>
+                    </div>
+
+                </div>
+
+                <div style="font-size: 0.85em; opacity: 0.9; margin-bottom: 6px;">
+                    <div>Toàn vẹn ngữ nghĩa: <span id="apeSemanticIntegrity" style="font-weight: bold;"></span></div>
+                    <div>Thời gian thực thi: <span id="apeExecutionTime" style="font-weight: bold;"></span></div>
+                    <div>Trạng thái đo đạc: <span id="apeMeasurementStatus" style="font-weight: bold;"></span></div>
+                </div>
+
+                <details style="margin-top: 8px;">
+                    <summary style="cursor: pointer; font-size: 0.85em; opacity: 0.8;">Xem Báo cáo Tiếng Việt Chi tiết</summary>
+                    <pre id="apeFullReport" style="font-size: 0.8em; background: #09090b; padding: 8px; border-radius: 4px; margin-top: 4px; white-space: pre-wrap; font-family: monospace; color: #e4e4e7; border: 1px solid #27272a;"></pre>
+                </details>
+
+            </div>
+
+            <div id="apeErrorDisplay" style="display: none; color: #f87171; margin-top: 8px; font-size: 0.9em;"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
          MEMORY
     ================================================= -->
 
@@ -570,6 +649,9 @@
 <script src="js/fate.js"></script>
 <script src="js/runtime.js"></script>
 <script src="js/core.js"></script>
+
+<!-- APE Lab Gateway -->
+<script type="module" src="js/ape-gateway.js"></script>
 
 
 </body>
