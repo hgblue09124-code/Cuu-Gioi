@@ -5,7 +5,7 @@
 
 const GAME = {
     name: "Cửu Giới",
-    version: "0.4.5",
+    version: "1.0.0",
     database: "CuuGioiDatabase",
     store: "gameState",
     saveKey: "player"
@@ -29,6 +29,31 @@ const WORLD = {
             name: "Thanh Vân Sơn — Ngoại vi",
             description:
                 "Khu rừng nằm ở phía ngoài Thanh Vân Sơn. Tiếng thú rừng thỉnh thoảng vang lên giữa những thân cây."
+        },
+        co_tu: {
+            name: "Cổ Tự Hoang Phế",
+            description:
+                "Ngôi chùa cổ thượng cổ, bị phong ấn bởi trận pháp cổ xưa. Bên trong có chứa cơ duyên."
+        },
+        huyet_son: {
+            name: "Huyết Sơn Lĩnh",
+            description:
+                "Dãy núi đỏ như máu, sản sinh vô số yêu thú huyết mạch. Là nơi luyện tâm rất tốt."
+        },
+        van_ly_sa_mac: {
+            name: "Vạn Lý Sa Mạc",
+            description:
+                "Sa mạc mênh mông, cát vàng cuồn cuộn. Truyền thuyết nơi đây có Cửu Chuyển Kim Đan ẩn giấu."
+        },
+        bac_hai: {
+            name: "Bắc Hải Tận Cùng",
+            description:
+                "Vùng biển phương bắc, sương mù dày đặc quanh năm. Có truyền thuyết về Long Cung dưới đáy biển."
+        },
+        thuong_gioi: {
+            name: "Thượng Giới Thánh Sơn",
+            description:
+                "Tầng trời thứ chín — nơi tiên nhân tụ hội. Cửu Giới Tông chưởng quản vùng đất này."
         }
     }
 };
@@ -38,7 +63,9 @@ const REALMS = [
     { name: "Luyện Khí", required: 100 },
     { name: "Trúc Cơ", required: 1000 },
     { name: "Kim Đan", required: 5000 },
-    { name: "Nguyên Anh", required: 20000 }
+    { name: "Nguyên Anh", required: 20000 },
+    { name: "Hóa Thần", required: 60000 },
+    { name: "Lục Đạo", required: 150000 }
 ];
 
 const ENEMIES = {
@@ -47,15 +74,99 @@ const ENEMIES = {
         maxHp: 60,
         attack: 10,
         reward: 25,
-        cultivation: 15
+        cultivation: 15,
+        weakness: "fire",
+        loot: { linh_thao: 1 }
     },
-
     lang_xam: {
         name: "Lang Xám",
         maxHp: 90,
         attack: 15,
         reward: 40,
-        cultivation: 25
+        cultivation: 25,
+        weakness: "fire",
+        loot: { yeu_dan: 1 }
+    },
+    doc_trung: {
+        name: "Độc Trùng",
+        maxHp: 45,
+        attack: 18,
+        reward: 35,
+        cultivation: 20,
+        weakness: "thunder",
+        loot: { linh_thao: 2 }
+    },
+    ac_linh: {
+        name: "Ác Linh",
+        maxHp: 150,
+        attack: 22,
+        reward: 80,
+        cultivation: 50,
+        weakness: "fire",
+        loot: { linh_tinh: 1 }
+    },
+    huyet_lang: {
+        name: "Huyết Lang",
+        maxHp: 180,
+        attack: 30,
+        reward: 120,
+        cultivation: 80,
+        weakness: "thunder",
+        loot: { huyet_tinh: 1 }
+    },
+    huyet_bao: {
+        name: "Huyết Báo",
+        maxHp: 250,
+        attack: 38,
+        reward: 180,
+        cultivation: 120,
+        weakness: "wind",
+        loot: { ma_dan: 1 }
+    },
+    sa_xa: {
+        name: "Sa Xà",
+        maxHp: 200,
+        attack: 28,
+        reward: 150,
+        cultivation: 90,
+        weakness: "thunder",
+        loot: { sa_tinh: 1 }
+    },
+    sa_yeu: {
+        name: "Sa Yêu",
+        maxHp: 320,
+        attack: 40,
+        reward: 250,
+        cultivation: 150,
+        weakness: "fire",
+        loot: { hoa_kiem: 1 }
+    },
+    hai_yeu: {
+        name: "Hải Yêu",
+        maxHp: 400,
+        attack: 50,
+        reward: 350,
+        cultivation: 200,
+        weakness: "thunder",
+        loot: { long_hoa: 1 }
+    },
+    long_chi: {
+        name: "Long Chi",
+        maxHp: 600,
+        attack: 65,
+        reward: 600,
+        cultivation: 400,
+        weakness: "thunder",
+        loot: { long_hoa: 2, hac_chan: 1 }
+    },
+    thien_nhan: {
+        name: "Thần Nhãn",
+        maxHp: 900,
+        attack: 85,
+        reward: 1000,
+        cultivation: 800,
+        weakness: "void",
+        loot: { tien_thach: 1, thien_luyen: 1 }
     }
 };
 
@@ -88,43 +199,131 @@ const QUESTS = {
 ===================================================== */
 
 const EXPLORE_EVENTS = [
-
     {
         title: "Hành trình bình yên",
         text: "Ngươi đi dọc con đường đá. Không có gì đặc biệt xảy ra.",
         gold: 0,
         cultivation: 5
     },
-
     {
         title: "Phát hiện Linh Thạch",
         text: "Ngươi phát hiện một viên linh thạch bên vệ đường.",
         gold: 20,
         cultivation: 0
     },
-
     {
         title: "Linh khí bất thường",
         text: "Một luồng linh khí bất thường xuất hiện trong rừng.",
         gold: 0,
         cultivation: 25
     },
-
     {
         title: "Thương nhân lang thang",
         text: "Ngươi gặp một thương nhân lang thang.",
         gold: -10,
         cultivation: 10
     },
-
     {
         title: "Linh quả trong bụi cỏ",
         text: "Trong bụi cỏ có một quả linh quả.",
         gold: 0,
         cultivation: 5,
         item: "linh_qua"
+    },
+    {
+        title: "Động phủ cổ xưa",
+        text: "Ngươi phát hiện một động phủ cổ bị lãng quên giữa núi non.",
+        gold: 50,
+        cultivation: 30
+    },
+    {
+        title: "Gặp tu sĩ đồng cốt",
+        text: "Một tu sĩ tóc bạc ngồi thiền bên cạnh. Ngươi nhận được lời chỉ dẫn.",
+        gold: 0,
+        cultivation: 40
+    },
+    {
+        title: "Thiên tài địa bảo",
+        text: "Ngươi nhặt được một viên tinh thạch phát sáng.",
+        gold: 0,
+        cultivation: 15,
+        item: "tinh_thach"
+    },
+    {
+        title: "Đêm trăng non",
+        text: "Trăng non treo trên đỉnh núi. Linh khí đêm nay đặc biệt dồi dào.",
+        gold: 0,
+        cultivation: 50
+    },
+    {
+        title: "Yêu thú rừng sâu",
+        text: "Ngươi đụng độ một con yêu thú rừng sâu. Phải bỏ chạy.",
+        gold: -20,
+        cultivation: 0
+    },
+    {
+        title: "Cây linh thảo quý",
+        text: "Bên vệ đường có một cây linh thảo quý hiếm.",
+        gold: 0,
+        cultivation: 20,
+        item: "linh_thao"
+    },
+    {
+        title: "Vết chân cổ xưa",
+        text: "Ngươi phát hiện những dấu vết của một tu sĩ cổ xưa. Đâu đó có bảo tàng.",
+        gold: 80,
+        cultivation: 10
+    },
+    {
+        title: "Khe suối linh khí",
+        text: "Một dòng suối nhỏ chảy qua đá. Nước có vị ngọt lạ.",
+        gold: 0,
+        cultivation: 35
+    },
+    {
+        title: "Linh thạch từ trên trời rơi",
+        text: "Một viên đá phát sáng rơi xuống trước mặt ngươi. Linh lực bên trong rất mạnh.",
+        gold: 0,
+        cultivation: 60
+    },
+    {
+        title: "Lạc đường trong sương",
+        text: "Ngươi đi lạc trong sương mù. Mất thời gian tìm đường.",
+        gold: 0,
+        cultivation: 0
+    },
+    {
+        title: "Huyết thảo núi cao",
+        text: "Trên vách núi cao có một cây huyết thảo quý.",
+        gold: 0,
+        cultivation: 45,
+        item: "yeu_dan"
+    },
+    {
+        title: "Cổ vật trong đất",
+        text: "Ngươi đào được một món cổ vật có linh khí.",
+        gold: 100,
+        cultivation: 0
+    },
+    {
+        title: "Thiên tai bất ngờ",
+        text: "Một trận động đất nhỏ. May mắn không ai bị thương.",
+        gold: -30,
+        cultivation: 0
+    },
+    {
+        title: "Bí cảnh ẩn giấu",
+        text: "Ngươi vô tình tìm thấy một bí cảnh ẩn giấu sau thác nước. Bên trong có linh khí đậm đặc.",
+        gold: 0,
+        cultivation: 80,
+        item: "linh_tinh"
+    },
+    {
+        title: "Đêm sao băng",
+        text: "Sao băng lướt qua bầu trời. Ngươi nguyện ước và cảm nhận được linh lực trong thiên địa.",
+        gold: 0,
+        cultivation: 55
     }
-
 ];
 
 
@@ -165,7 +364,27 @@ function createNewPlayer() {
             }
         },
 
+        /* Big Update v1.0 — expanded quest system */
+        quests: {},
+
+        /* Big Update v1.0 — learned skills */
+        learnedSkills: [],
+
+        /* Big Update v1.0 — combat state */
         combat: null,
+        weaponBuff: 0,
+        weaponBuffTurns: 0,
+        nextDamageBonus: 0,
+        shieldTurns: 0,
+
+        /* Big Update v1.0 — secret tracking */
+        secrets: {},
+        exploredAreas: [],
+        giftedNPCs: {},
+        fateReadCount: 0,
+        combatWins: 0,
+        exploreBonus: 0,
+        npcCooldowns: {},
 
         /*
          * Story state
@@ -443,6 +662,21 @@ function normalizePlayer(data) {
     ) {
         normalized.storyState.active = null;
     }
+
+    /* Big Update v1.0 — ensure new fields */
+    if (!Array.isArray(normalized.learnedSkills)) normalized.learnedSkills = [];
+    if (!Array.isArray(normalized.exploredAreas)) normalized.exploredAreas = [];
+    if (typeof normalized.combatWins !== "number") normalized.combatWins = 0;
+    if (typeof normalized.fateReadCount !== "number") normalized.fateReadCount = 0;
+    if (typeof normalized.exploreBonus !== "number") normalized.exploreBonus = 0;
+    if (typeof normalized.weaponBuff !== "number") normalized.weaponBuff = 0;
+    if (typeof normalized.weaponBuffTurns !== "number") normalized.weaponBuffTurns = 0;
+    if (typeof normalized.nextDamageBonus !== "number") normalized.nextDamageBonus = 0;
+    if (typeof normalized.shieldTurns !== "number") normalized.shieldTurns = 0;
+    if (!normalized.secrets) normalized.secrets = {};
+    if (!normalized.giftedNPCs) normalized.giftedNPCs = {};
+    if (!normalized.npcCooldowns) normalized.npcCooldowns = {};
+    if (!normalized.quests) normalized.quests = {};
 
 
     return normalized;

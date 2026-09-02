@@ -556,3 +556,50 @@ button.danger { color: var(--danger); }
     padding: 0;
     font-size: 13px;
 }
+
+/* =====================================================
+   BIG UPDATE v1.0 — NEW SECTIONS
+===================================================== */
+
+.skill-category-header {
+    margin-top: 10px;
+    margin-bottom: 4px;
+    color: var(--accent);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.skill-card {
+    border-color: rgba(145,184,255,.16);
+}
+
+.skill-card .card-name {
+    color: var(--accent);
+}
+
+.skill-card button {
+    margin-top: 8px;
+    font-size: 12px;
+    min-height: 36px;
+}
+
+#worldMapArea .card {
+    border-color: rgba(229,203,135,.22);
+}
+
+#worldMapArea .card .card-name {
+    color: var(--gold);
+}
+
+#secretArea .card {
+    transition: opacity .3s ease;
+}
+
+#secretArea .card .card-name {
+    color: var(--admin);
+}
+
+.npc-box button {
+    margin-top: 8px;
+}

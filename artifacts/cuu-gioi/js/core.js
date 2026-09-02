@@ -245,6 +245,11 @@ function explore() {
     player.gold += goldReward;
     player.cultivation += cultivationReward;
 
+    /* Track explored area */
+    if (typeof trackExploredArea === "function") {
+        trackExploredArea(player.location);
+    }
+
 
     log(eventText);
 
@@ -322,7 +327,21 @@ function explore() {
     );
 
 
+    /* Big Update v1.0 — extended quest progress tracking */
+    if (typeof updateQuestFull === "function") {
+        updateQuestFull("explore");
+    }
     updateQuest("explore");
+
+    /* Check for secret discoveries */
+    if (typeof checkSecrets === "function") {
+        const found = checkSecrets();
+        found.forEach(sid => {
+            if (typeof showSecretDiscovery === "function") {
+                showSecretDiscovery(sid);
+            }
+        });
+    }
 
     autoSave();
     render();
@@ -371,12 +390,30 @@ function renderTravel() {
     (TRAVEL[player.location] || [])
         .forEach(destination => {
 
+            if (!WORLD.locations[destination]) return;
+
+            /* Check access requirement (Big Update v1.0) */
+            let accessible = true;
+            let reason = "";
+            if (typeof regionHasAccess === "function") {
+                accessible = regionHasAccess(destination);
+                const region = WORLD_REGIONS && WORLD_REGIONS[destination];
+                if (!accessible && region) {
+                    reason = region.requires || "";
+                }
+            }
+
             const button =
                 document.createElement("button");
 
             button.textContent =
                 "Đi tới " +
                 WORLD.locations[destination].name;
+
+            if (!accessible) {
+                button.disabled = true;
+                button.textContent += ` (${reason})`;
+            }
 
             button.onclick =
                 () => travel(destination);
@@ -398,12 +435,26 @@ function travel(destination) {
         return;
     }
 
+    /* Big Update v1.0 — check region access before moving */
+    if (typeof regionHasAccess === "function" && !regionHasAccess(destination)) {
+        const region = WORLD_REGIONS && WORLD_REGIONS[destination];
+        toast(`Chưa thể đến ${WORLD.locations[destination].name}. ${region ? region.requires : ""}`);
+        return;
+    }
+
     player.location = destination;
 
     log(
         `Ngươi đi tới ${WORLD.locations[destination].name}.`
     );
 
+    if (typeof trackExploredArea === "function") {
+        trackExploredArea(destination);
+    }
+
+    if (typeof updateQuestFull === "function") {
+        updateQuestFull("travel", destination);
+    }
     updateQuest("travel");
 
     autoSave();
@@ -460,37 +511,27 @@ function renderCombat() {
 
     if (!player.combat) {
 
-        if (
-            player.location ===
-            "thanh_van_rung"
-        ) {
+        const region = WORLD_REGIONS && WORLD_REGIONS[player.location];
+        const hasEnemies = region && region.enemies && region.enemies.length;
 
+        if (hasEnemies) {
             container.innerHTML =
                 `<div class="small">
-                    Trong rừng có dấu vết của yêu thú.
+                    ${escapeHTML(region.description || "Khu vực nguy hiểm.")}
                 </div>`;
 
-            const button =
-                document.createElement("button");
-
-            button.textContent =
-                "Tiến vào khu vực nguy hiểm";
-
-            button.onclick =
-                () =>
-                    startCombat(
-                        Math.random() < 0.6
-                            ? "son_tho"
-                            : "lang_xam"
-                    );
-
-            container.appendChild(button);
-
+            region.enemies.forEach(eid => {
+                const enemy = ENEMIES[eid];
+                if (!enemy) return;
+                const btn = document.createElement("button");
+                btn.textContent = `Giao chiến với ${enemy.name}`;
+                btn.onclick = () => startCombat(eid);
+                container.appendChild(btn);
+            });
         } else {
-
             container.innerHTML =
                 `<div class="small">
-                    Hiện tại không có đối thủ.
+                    Hiện tại không có đối thủ ở khu vực này.
                 </div>`;
         }
 
@@ -526,7 +567,7 @@ function renderCombat() {
 
     attack.className = "primary";
     attack.textContent = "Tấn công";
-    attack.onclick = playerAttack;
+    attack.onclick = typeof playerAttackEnhanced !== "undefined" ? playerAttackEnhanced : playerAttack;
 
     container.appendChild(attack);
 
@@ -557,6 +598,10 @@ function renderCombat() {
 
 
 function playerAttack() {
+    /* Use enhanced version if loaded from combat.js (Big Update v1.0) */
+    if (typeof playerAttackEnhanced === "function") {
+        return playerAttackEnhanced();
+    }
 
     if (!player.combat) return;
 
@@ -585,72 +630,71 @@ function playerAttack() {
     render();
 }
 
-
+const _enemyAttackOriginal = typeof enemyAttack !== "undefined" ? enemyAttack : null;
+const _enemyAttackEnhanced = typeof enemyAttackEnhanced !== "undefined" ? enemyAttackEnhanced : null;
 function enemyAttack() {
-
-    if (!player.combat) return;
-
-    const damage =
-        Math.max(
-            1,
-            Math.floor(Math.random() * 6)
-            + player.combat.enemyAttack
-            - 5
-        );
-
-    player.hp -= damage;
-
-    log(
-        `${player.combat.enemyName} gây ${damage} sát thương.`,
-        "danger"
-    );
-
-
-    if (player.hp <= 0) {
-
-        player.hp = 1;
-        player.combat = null;
-
-        showPopup(
-            "Cảnh báo sinh mệnh",
-            "Ngươi đã trọng thương và buộc phải rút lui."
-        );
-
-        log(
-            "Ngươi trọng thương.",
-            "danger"
-        );
+    if (_enemyAttackEnhanced) {
+        _enemyAttackEnhanced();
+        return;
+    }
+    if (_enemyAttackOriginal) {
+        _enemyAttackOriginal();
+        return;
     }
 }
 
 
 function winCombat() {
+    /* Use enhanced version if loaded from combat.js (Big Update v1.0) */
+    if (typeof winCombatEnhanced === "function") {
+        return winCombatEnhanced();
+    }
 
     const enemy =
         ENEMIES[player.combat.enemyId];
 
-    player.gold += enemy.reward;
-    player.cultivation += enemy.cultivation;
+    player.gold += (enemy.reward || 0);
+    player.cultivation += (enemy.cultivation || 0);
     player.combat = null;
 
+    /* Track win counter for secrets */
+    if (typeof trackCombatWin === "function") {
+        trackCombatWin();
+    }
 
-    showPopup(
-        "Chiến thắng",
-        `Đánh bại ${enemy.name}. Nhận ${enemy.reward} linh thạch và ${enemy.cultivation} linh lực.`
-    );
+    /* Check for secret discoveries */
+    if (typeof checkSecrets === "function") {
+        const found = checkSecrets();
+        found.forEach(sid => {
+            if (typeof showSecretDiscovery === "function") showSecretDiscovery(sid);
+        });
+    }
 
+    /* Show loot drop */
+    let lootText = "";
+    if (enemy.loot) {
+        Object.entries(enemy.loot).forEach(([itemId, qty]) => {
+            player.inventory[itemId] = (player.inventory[itemId] || 0) + qty;
+            const item = ITEMS[itemId];
+            lootText += `Nhận ${qty}x ${item ? item.name : itemId}. `;
+        });
+    }
 
-    log(
+    const popupText = [
         `Đánh bại ${enemy.name}.`,
-        "good"
-    );
+        `+${enemy.reward || 0} linh thạch, +${enemy.cultivation || 0} linh lực.`,
+        lootText
+    ].filter(Boolean).join("\n");
 
-    log(
-        `Nhận ${enemy.reward} linh thạch và ${enemy.cultivation} linh lực.`,
-        "good"
-    );
+    showPopup("Chiến thắng", popupText);
 
+    log(`Đánh bại ${enemy.name}. +${enemy.reward || 0} LT, +${enemy.cultivation || 0} LL.`, "good");
+    if (lootText) log(lootText, "good");
 
+    /* Big Update v1.0 — extended quest progress */
+    if (typeof updateQuestFull === "function") {
+        updateQuestFull("combat", enemy.id);
+    }
     updateQuest("combat");
 
     autoSave();
@@ -726,69 +770,23 @@ function updateQuest(action) {
 
 
 function renderQuest() {
-
-    const container =
-        document.getElementById("questArea");
-
-    if (!container) return;
-
-    container.innerHTML = "";
-
-    const quest =
-        player.quest.first_step;
-
-
-    if (!quest.accepted) {
-
-        container.innerHTML = `
-            <div class="card">
-
-                <div class="card-name">
-                    ${QUESTS.first_step.name}
-                </div>
-
-                <div class="card-desc">
-                    ${QUESTS.first_step.description}
-                </div>
-
-                <button
-                    onclick="acceptFirstQuest()">
-                    Nhận nhiệm vụ
-                </button>
-
-            </div>
-        `;
-
-        return;
+    /* Delegated to renderQuestFull() from quests.js */
+    if (typeof renderQuestFull === "function") {
+        renderQuestFull();
+    } else {
+        /* Fallback — original simple quest render */
+        const container = document.getElementById("questArea");
+        if (!container) return;
+        container.innerHTML = `<div class="small">Nạp hệ thống nhiệm vụ...</div>`;
     }
-
-
-    container.innerHTML = `
-        <div class="card">
-
-            <div class="card-name">
-                ${QUESTS.first_step.name}
-            </div>
-
-            <div class="card-desc">
-                ${QUESTS.first_step.description}
-            </div>
-
-            <div class="card-desc">
-                Tiến độ:
-                ${
-                    quest.completed
-                        ? "Đã hoàn thành"
-                        : `${quest.progress} / ${QUESTS.first_step.goal}`
-                }
-            </div>
-
-        </div>
-    `;
 }
 
 
 function acceptFirstQuest() {
+
+    if (typeof acceptQuest === "function" && typeof QUESTS_FULL !== "undefined" && QUESTS_FULL.first_step) {
+        return acceptQuest("first_step");
+    }
 
     player.quest.first_step.accepted = true;
 
@@ -1247,8 +1245,8 @@ async function bootGame() {
 
 
             showPopup(
-                "Cửu Giới",
-                "Hệ thống tu hành đã được khởi tạo. Một con đường vô tận đang chờ đợi ngươi."
+                "Cửu Giới — Big Update v1.0",
+                "Hệ thống tu hành đã được khởi tạo. Bảy cảnh giới, tám vùng đất, vô số bí ẩn đang chờ ngươi khám phá."
             );
         }
 

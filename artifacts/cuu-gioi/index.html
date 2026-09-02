@@ -8,7 +8,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 
-    <title>Cửu Giới — Core v0.4.5</title>
+    <title>Cửu Giới — Big Update v1.0</title>
 
     <link
         rel="stylesheet"
@@ -165,7 +165,7 @@
         </div>
 
         <div class="game-version">
-            Core v0.4.5 · Local Realm
+            Core v1.0 · Cửu Giới Mở Rộng
         </div>
 
     </header>
@@ -453,6 +453,48 @@
 
     </section>
 
+    <!-- =================================================
+         WORLD MAP — Big Update v1.0
+    ================================================= -->
+
+    <section class="panel">
+
+        <div class="section-title">
+            Bản đồ thế giới
+        </div>
+
+        <div id="worldMapArea"></div>
+
+    </section>
+
+    <!-- =================================================
+         SKILLS — Big Update v1.0
+    ================================================= -->
+
+    <section class="panel">
+
+        <div class="section-title">
+            Kỹ năng
+        </div>
+
+        <div id="skillArea"></div>
+
+    </section>
+
+    <!-- =================================================
+         SECRETS — Big Update v1.0
+    ================================================= -->
+
+    <section class="panel">
+
+        <div class="section-title">
+            Bí ẩn đã khám phá
+        </div>
+
+        <div id="secretArea"></div>
+
+    </section>
+
 
     <!-- =================================================
          ADMIN PANEL
@@ -552,24 +594,41 @@
 </div>
 
 <!-- =====================================================
-     MODULE LOAD ORDER
+     MODULE LOAD ORDER — Big Update v1.0
 ===================================================== -->
 
+<!-- State & Data -->
 <script src="js/state.js"></script>
-
 <script src="js/ui.js"></script>
 
+<!-- Inventory & Items -->
 <script src="js/inventory.js"></script>
+<script src="js/items.js"></script>
 
+<!-- Admin -->
 <script src="js/admin.js"></script>
 
-<!-- Story Engine -->
+<!-- Story -->
 <script src="js/story.js"></script>
 
-<!-- Core phải load cuối vì bootGame() chạy tại đây -->
+<!-- Fate -->
 <script src="js/fate.js"></script>
+
+<!-- World, NPCs, Skills, Combat, Secrets -->
+<script src="js/world.js"></script>
+<script src="js/npcs.js"></script>
+<script src="js/skills.js"></script>
+<script src="js/combat.js"></script>
+<script src="js/secrets.js"></script>
+
+<!-- Runtime Console -->
 <script src="js/runtime.js"></script>
+
+<!-- Core — bootGame() runs last, defines base functions -->
 <script src="js/core.js"></script>
+
+<!-- Quests — loaded AFTER core.js so updateQuest/renderQuest override -->
+<script src="js/quests.js"></script>
 
 
 </body>

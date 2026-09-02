@@ -553,6 +553,23 @@ function render() {
     ) {
         renderAdmin();
     }
+
+    /* Big Update v1.0 — additional render calls */
+    if (typeof renderWorldMap === "function") {
+        try { renderWorldMap(); } catch (e) { console.warn("renderWorldMap error", e); }
+    }
+
+    if (typeof renderSkills === "function") {
+        try { renderSkills(); } catch (e) { console.warn("renderSkills error", e); }
+    }
+
+    if (typeof renderSecrets === "function") {
+        try { renderSecrets(); } catch (e) { console.warn("renderSecrets error", e); }
+    }
+
+    if (typeof renderQuestFull === "function") {
+        try { renderQuestFull(); } catch (e) { console.warn("renderQuestFull error", e); }
+    }
 }
 
 
