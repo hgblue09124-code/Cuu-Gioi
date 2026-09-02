@@ -90,6 +90,6 @@ export async function runExperiment002() {
 }
 
 // Allow direct execution via tsx
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (typeof process !== 'undefined' && process.argv && import.meta.url === `file://${process.argv[1]}`) {
   runExperiment002().catch(console.error);
 }
