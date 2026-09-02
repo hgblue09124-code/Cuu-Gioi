@@ -39,6 +39,9 @@ export class APEReportGenerator {
     lines.push(`║ Toàn vẹn ngữ nghĩa  : ${`${measurement.semanticIntegrityPercent}%`.padEnd(30)} ║`);
     lines.push(`║ Thời gian thực thi  : ${`${measurement.executionTimeSeconds}s`.padEnd(30)} ║`);
     lines.push(`║ Trạng thái          : ${statusText.padEnd(30)} ║`);
+    if (measurement.tokenizerInfo) {
+      lines.push(`║ Tokenizer           : ${measurement.tokenizerInfo.padEnd(30)} ║`);
+    }
     if (options.experimentMode) {
       lines.push('║ [Ghi chú: Số liệu trong môi trường thử nghiệm APE Lab]║');
     }

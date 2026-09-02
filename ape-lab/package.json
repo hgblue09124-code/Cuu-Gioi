@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "exp001": "node --import tsx experiments/cases/exp_001.ts",
+    "exp002": "node --import tsx experiments/cases/exp_002.ts",
     "test": "node --import tsx --test tests/ape-lab.test.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
@@ -12,5 +13,8 @@
     "@types/node": "catalog:",
     "tsx": "catalog:",
     "typescript": "~5.9.3"
+  },
+  "dependencies": {
+    "js-tiktoken": "^1.0.21"
   }
 }

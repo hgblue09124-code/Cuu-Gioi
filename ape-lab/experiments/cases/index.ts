@@ -1,4 +1,5 @@
 export * from './exp_001.js';
+export * from './exp_002.js';
 
 export interface ExperimentCase {
   id: string;
