@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "exp001": "node --import tsx experiments/cases/exp_001.ts",
     "test": "node --import tsx --test tests/ape-lab.test.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },

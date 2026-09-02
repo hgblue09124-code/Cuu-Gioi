@@ -1,3 +1,5 @@
+export * from './exp_001.js';
+
 export interface ExperimentCase {
   id: string;
   title: string;

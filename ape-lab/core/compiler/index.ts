@@ -32,7 +32,7 @@ export class ContextCompiler {
     const inferredTask = this.inferTask(cleanItems, normalizedContext.rawText);
 
     // 3. Resolve required context (filter out redundancy while retaining key constraints)
-    const { constraints, rules, flow } = this.resolveRequiredContext(cleanItems, inferredTask);
+    const { constraints, rules, flow } = this.resolveRequiredContext(cleanItems, inferredTask, normalizedContext.rawText);
 
     // 4. Build execution protocol
     return ProtocolEngine.format({
@@ -57,6 +57,9 @@ export class ContextCompiler {
   private inferTask(items: unknown[], rawText: string): InferredTask {
     const textLower = rawText.toLowerCase();
 
+    if (textLower.includes('sửa') || textLower.includes('patch') || textLower.includes('fix') || textLower.includes('cuộn')) {
+      return { taskType: 'PATCH', params: { TARGET: 'RUNTIME_SCROLL' }, confidence: 0.95 };
+    }
     if (textLower.includes('train') || textLower.includes('huấn luyện')) {
       return { taskType: 'TRAIN', params: { R: 'LQ', L: 7 }, confidence: 0.9 };
     }
@@ -70,10 +73,10 @@ export class ContextCompiler {
     return { taskType: 'GENERAL_TASK', params: { MODE: 'AUTO' }, confidence: 0.7 };
   }
 
-  private resolveRequiredContext(cleanItems: unknown[], inferredTask: InferredTask) {
+  private resolveRequiredContext(cleanItems: unknown[], inferredTask: InferredTask, rawText: string) {
     const constraints: ContextConstraint[] = [];
     const rules: RuleDirective[] = [];
-    const flowSteps: string[] = ['CHK', 'ACT', 'UPD'];
+    let flowSteps: string[] = ['CHK', 'ACT', 'UPD'];
 
     // Extract key parameters as compact constraints
     if (inferredTask.params) {
@@ -82,8 +85,13 @@ export class ContextCompiler {
       }
     }
 
-    rules.push({ code: 'PRESERVE_SEMANTICS' });
-    rules.push({ code: 'STRICT_CONSTRAINTS' });
+    if (inferredTask.taskType === 'PATCH') {
+      rules.push({ code: 'PRESERVE_EXISTING' });
+      flowSteps = ['INSPECT', 'PATCH', 'TEST'];
+    } else {
+      rules.push({ code: 'PRESERVE_SEMANTICS' });
+      rules.push({ code: 'STRICT_CONSTRAINTS' });
+    }
 
     return {
       constraints,

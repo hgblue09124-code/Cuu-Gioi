@@ -14,7 +14,7 @@ export interface ExecutionRecord {
     protocolSize: number;
   };
   measurement: APEMeasurementResult;
-  status: 'SUCCESS' | 'FAILED' | 'ERROR';
+  status: 'SUCCESS' | 'FAILED' | 'ERROR' | 'PARTIAL';
   error?: string;
   metadata?: Record<string, unknown>;
 }
