@@ -58,9 +58,9 @@ export class ContextCompiler {
     const textUpper = rawText.toUpperCase();
     const textLower = rawText.toLowerCase();
 
-    // Check explicit TARGET match
+    // Dynamically match TARGET from context
     let target = '';
-    const targetMatch = rawText.match(/TARGET:\s*([A-Za-z0-9_]+)/i);
+    const targetMatch = rawText.match(/TARGET:\s*([A-Za-z0-9_-]+)/i);
     if (targetMatch && targetMatch[1]) {
       target = targetMatch[1].toUpperCase();
     } else if (textUpper.includes('LOGIN_BUTTON')) {
@@ -71,27 +71,32 @@ export class ContextCompiler {
       target = 'RUNTIME_SCROLL';
     }
 
-    if (textLower.includes('sửa') || textLower.includes('patch') || textLower.includes('fix') || target) {
-      const params: Record<string, string | number | boolean> = {};
-      if (target) {
-        params.TARGET = target;
-      } else {
-        params.TARGET = 'RUNTIME_SCROLL';
-      }
-      return { taskType: 'PATCH', params, confidence: 0.95 };
+    // Determine task type based on explicit context keywords or general pattern
+    let taskType = 'GENERAL_TASK';
+    const params: Record<string, string | number | boolean> = {};
+
+    const taskMatch = rawText.match(/(?:TASK|ACTION):\s*([A-Za-z0-9_]+)/i);
+    if (taskMatch && taskMatch[1]) {
+      taskType = taskMatch[1].toUpperCase();
+    } else if (textLower.includes('sửa') || textLower.includes('patch') || textLower.includes('fix') || target) {
+      taskType = 'PATCH';
+    } else if (textLower.includes('train') || textLower.includes('huấn luyện')) {
+      taskType = 'TRAIN';
+      params.R = 'LQ';
+      params.L = 7;
+    } else if (textLower.includes('query') || textLower.includes('hỏi') || textLower.includes('tìm')) {
+      taskType = 'QUERY';
+      params.MODE = 'FAST';
+    } else if (textLower.includes('execute') || textLower.includes('thực thi')) {
+      taskType = 'EXEC';
+      params.MODE = 'STRICT';
     }
 
-    if (textLower.includes('train') || textLower.includes('huấn luyện')) {
-      return { taskType: 'TRAIN', params: { R: 'LQ', L: 7 }, confidence: 0.9 };
-    }
-    if (textLower.includes('query') || textLower.includes('hỏi') || textLower.includes('tìm')) {
-      return { taskType: 'QUERY', params: { MODE: 'FAST' }, confidence: 0.85 };
-    }
-    if (textLower.includes('execute') || textLower.includes('thực thi')) {
-      return { taskType: 'EXEC', params: { MODE: 'STRICT' }, confidence: 0.9 };
+    if (target) {
+      params.TARGET = target;
     }
 
-    return { taskType: 'GENERAL_TASK', params: { MODE: 'AUTO' }, confidence: 0.7 };
+    return { taskType, params, confidence: taskType === 'GENERAL_TASK' ? 0.7 : 0.95 };
   }
 
   private resolveRequiredContext(cleanItems: unknown[], inferredTask: InferredTask, rawText: string) {
@@ -106,8 +111,20 @@ export class ContextCompiler {
       }
     }
 
+    // Extract dynamic key-values formatted as KEY=VALUE or KEY: VALUE
+    const kvMatches = rawText.matchAll(/([A-Z0-9_]{2,})\s*[:=]\s*([A-Za-z0-9_-]+)/g);
+    for (const match of kvMatches) {
+      const key = match[1].toUpperCase();
+      const value = match[2];
+      if (!['TARGET', 'TASK', 'ACTION', 'FLOW', 'REQUIREMENT', 'CONSTRAINT', 'RULE'].includes(key)) {
+        if (!constraints.some((c) => c.key === key)) {
+          constraints.push({ key, value });
+        }
+      }
+    }
+
     // Extract explicit REQUIREMENT
-    const reqMatch = rawText.match(/REQUIREMENT:\s*([A-Za-z0-9_]+)/i);
+    const reqMatch = rawText.match(/REQUIREMENT:\s*([A-Za-z0-9_-]+)/i);
     if (reqMatch && reqMatch[1]) {
       constraints.push({ key: 'REQ', value: reqMatch[1].toUpperCase() });
     } else if (rawText.toUpperCase().includes('DISABLE_BUTTON_WHILE_REQUEST_PENDING')) {
@@ -117,7 +134,7 @@ export class ContextCompiler {
     }
 
     // Extract explicit CONSTRAINT / RULE
-    const ruleMatch = rawText.match(/CONSTRAINT:\s*([A-Za-z0-9_]+)/i);
+    const ruleMatch = rawText.match(/(?:CONSTRAINT|RULE):\s*([A-Za-z0-9_-]+)/i);
     if (ruleMatch && ruleMatch[1]) {
       rules.push({ code: ruleMatch[1].toUpperCase() });
     } else if (inferredTask.taskType === 'PATCH') {
@@ -133,6 +150,11 @@ export class ContextCompiler {
       flowSteps = flowMatch[1].split('>').map((s) => s.trim().toUpperCase());
     } else if (inferredTask.taskType === 'PATCH') {
       flowSteps = ['INSPECT', 'PATCH', 'TEST'];
+    }
+
+    // Break-even check: if raw text is shorter than formatted protocol overhead, include PRESERVE_RAW rule
+    if (rawText.trim().length < 50) {
+      rules.push({ code: 'PRESERVE_RAW' });
     }
 
     return {

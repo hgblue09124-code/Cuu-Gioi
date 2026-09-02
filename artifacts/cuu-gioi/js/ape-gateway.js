@@ -97,3 +97,22 @@ if (typeof globalThis !== 'undefined') {
 if (typeof window !== 'undefined') {
   window.APEGatewayUI = APEGatewayUI;
 }
+
+// Attach event listener directly to ensure button works regardless of inline attribute timing
+function setupGatewayListeners() {
+  const compileBtn = document.getElementById('apeCompileBtn');
+  if (compileBtn) {
+    compileBtn.onclick = (e) => {
+      if (e) e.preventDefault();
+      APEGatewayUI.compileContext();
+    };
+  }
+}
+
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupGatewayListeners);
+  } else {
+    setupGatewayListeners();
+  }
+}
